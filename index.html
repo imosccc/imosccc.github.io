@@ -15,6 +15,245 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+  }
+
+  /* ---- 左上角闹钟按钮 ---- */
+  .alarm-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    background: #f2f7f4;
+    border: 2px solid #b7c9be;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+    z-index: 1000;
+  }
+  .alarm-toggle:hover {
+    background: #e8f0eb;
+    transform: scale(1.1);
+  }
+  .alarm-toggle.active {
+    background: #27ae60;
+    border-color: #27ae60;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+  }
+
+  /* ---- 右上角计算器按钮 ---- */
+  .calc-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    background: #f2f7f4;
+    border: 2px solid #b7c9be;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+    z-index: 1000;
+  }
+  .calc-toggle:hover {
+    background: #e8f0eb;
+    transform: scale(1.1);
+  }
+
+  /* ---- 弹窗通用样式 ---- */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal.show {
+    display: flex;
+  }
+  .modal-content {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  }
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: #f2f7f4;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .modal-close:hover {
+    background: #e8f0eb;
+  }
+  .modal-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* ---- 闹钟弹窗 ---- */
+  .alarm-input-group {
+    margin-bottom: 16px;
+  }
+  .alarm-input-group label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+  .alarm-input-group input[type="time"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #b7c9be;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+  }
+  .alarm-input-group input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #b7c9be;
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+  .alarm-countdown {
+    text-align: center;
+    padding: 16px;
+    background: #f2f7f4;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+  }
+  .alarm-countdown-time {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c4a3e;
+    margin-top: 8px;
+  }
+  .alarm-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  .alarm-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .alarm-btn-set {
+    background: #27ae60;
+    color: white;
+  }
+  .alarm-btn-set:hover {
+    background: #229954;
+  }
+  .alarm-btn-cancel {
+    background: #e74c3c;
+    color: white;
+  }
+  .alarm-btn-cancel:hover {
+    background: #c0392b;
+  }
+
+  /* ---- 计算器弹窗 ---- */
+  .calc-display {
+    background: #f2f7f4;
+    border: 1px solid #b7c9be;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 1.8rem;
+    text-align: right;
+    margin-bottom: 16px;
+    min-height: 60px;
+    word-break: break-all;
+    font-family: "Courier New", monospace;
+  }
+  .calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .calc-btn {
+    padding: 16px;
+    border: 1px solid #b7c9be;
+    border-radius: 8px;
+    background: #ffffff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .calc-btn:hover {
+    background: #f2f7f4;
+  }
+  .calc-btn:active {
+    transform: scale(0.95);
+  }
+  .calc-btn-operator {
+    background: #2c4a3e;
+    color: white;
+    border-color: #2c4a3e;
+  }
+  .calc-btn-operator:hover {
+    background: #1a2e26;
+  }
+  .calc-btn-equals {
+    background: #27ae60;
+    color: white;
+    border-color: #27ae60;
+    grid-column: span 2;
+  }
+  .calc-btn-equals:hover {
+    background: #229954;
+  }
+  .calc-btn-clear {
+    background: #e74c3c;
+    color: white;
+    border-color: #e74c3c;
+  }
+  .calc-btn-clear:hover {
+    background: #c0392b;
   }
 
   .container {
@@ -27,7 +266,7 @@
     flex: 1;
   }
 
-  /* ---- 名字区域 ---- */
+  /* ---- 名字 ---- */
   .name {
     font-size: 2.4rem;
     font-weight: 700;
@@ -35,17 +274,18 @@
     margin-bottom: 36px;
   }
 
-  /* ---- 四栏信息 ---- */
+  /* ---- 信息栏 ---- */
   .info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 12px;
     width: 100%;
-    margin-bottom: 36px;
+    max-width: 400px;
+    margin-bottom: 48px;
     text-align: center;
   }
   .info-item {
-    padding: 10px 6px;
+    padding: 14px 8px;
     border: 1px solid #b7c9be;
     border-radius: 8px;
     transition: background .2s;
@@ -55,6 +295,10 @@
   .info-item a {
     color: #2c4a3e;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
   }
   .info-item a:hover { text-decoration: underline; }
   .info-label {
@@ -66,15 +310,6 @@
   .info-value {
     font-size: 0.88rem;
     font-weight: 500;
-    word-break: break-all;
-  }
-
-  /* ---- 分隔线 ---- */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #b7c9be, transparent);
-    margin: 8px 0 40px;
   }
 
   /* ---- 诗词区域 ---- */
@@ -95,82 +330,24 @@
     letter-spacing: 0.06em;
   }
 
-  /* ---- 底部 ---- */
-  footer {
+  /* ---- 署名 ---- */
+  .signature {
+    text-align: right;
     width: 100%;
-    text-align: center;
-    padding: 28px 16px 32px;
-    border-top: 1px solid #dde7e0;
-    font-size: 0.78rem;
-    opacity: 0.5;
-    letter-spacing: 0.04em;
-    line-height: 1.8;
+    max-width: 560px;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+    margin-bottom: 48px;
   }
-  #clock { font-variant-numeric: tabular-nums; }
 
-  /* ---- 响应式 ---- */
-  @media (max-width: 520px) {
-    .info-grid { grid-template-columns: repeat(2, 1fr); }
-    .name { font-size: 1.8rem; }
+  /* ---- 徽章区域 ---- */
+  .badges {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
   }
-</style>
-</head>
-<body>
-
-<div class="container">
-
-  <!-- 名字 -->
-  <div class="name">王世朋</div>
-
-  <!-- 信息栏 -->
-  <div class="info-grid">
-    <div class="info-item">
-      <div class="info-label">个人博客</div>
-      <div class="info-value"><a href="https://www.shimail.cn" target="_blank">前往博客 →</a></div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">其他项目</div>
-      <div class="info-value"><a href="https://www.wangshipeng.com" target="_blank">查看项目 →</a></div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- 毛泽东诗词 -->
-  <div class="poem-section">
-    <div class="poem-title">浪淘沙 · 北戴河</div>
-    <div class="poem-body">
-      大雨落幽燕，白浪滔天，秦皇岛外打鱼船。<br>
-      一片汪洋都不见，知向谁边？<br><br>
-      往事越千年，魏武挥鞭，东临碣石有遗篇。<br>
-      萧瑟秋风今又是，换了人间。
-    </div>
-  </div>
-
-  <!-- 署名 -->
-  <div style="text-align:right; margin-bottom:48px; font-size:1rem; letter-spacing:0.1em; opacity:0.7; width:100%; max-width:560px;">
-    —— 毛泽东
-  </div>
-
-</div>
-
-<footer>
-  <div>当前时间：<span id="clock">--</span></div>
-  <div>© 2026 WSP · All Rights Reserved</div>
-</footer>
-
-<script>
-  /* 实时时钟 */
-  function tick() {
-    const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    document.getElementById('clock').textContent =
-      `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ` +
-      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-  }
-  tick();
-  setInterval(tick, 1000);
-</script>
-
-</body>
-</html>
+  .badge {
+    dis
