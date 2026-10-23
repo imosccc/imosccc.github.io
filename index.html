@@ -209,13 +209,27 @@
   tick();
   setInterval(tick, 1000);
 
-  /* 获取 IP 与定位（使用公开接口） */
-  fetch('https://ipapi.co/json/')
-    .then(r => r.json())
-    .then(d => {
-      document.getElementById('ip').textContent = d.ip || '未知';
-      const parts = [d.city, d.region, d.country_name].filter(Boolean);
-      document.getElementById('location').textContent = parts.join(' · ') || '未知';
+  /* 获取 IP 与定位（国内搜狐接口，中文显示） */
+  function getIPFromSohu() {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://pv.sohu.com/cityjson';
+      script.onload = () => {
+        if (window.returnCitySN) {
+          resolve(window.returnCitySN);
+        } else {
+          reject(new Error('Sohu IP data not available'));
+        }
+      };
+      script.onerror = () => reject(new Error('Failed to load Sohu IP script'));
+      document.head.appendChild(script);
+    });
+  }
+
+  getIPFromSohu()
+    .then(data => {
+      document.getElementById('ip').textContent = data.cip || '未知';
+      document.getElementById('location').textContent = data.cname || '未知';
     })
     .catch(() => {
       document.getElementById('ip').textContent = '获取失败';
