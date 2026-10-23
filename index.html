@@ -33,29 +33,19 @@
     font-weight: 700;
     letter-spacing: 0.15em;
     margin-bottom: 36px;
-    position: relative;
-  }
-  .name::after {
-    content: "";
-    display: block;
-    width: 48px;
-    height: 2px;
-    background: #2c4a3e;
-    margin: 14px auto 0;
-    border-radius: 1px;
   }
 
   /* ---- 四栏信息 ---- */
   .info-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
     width: 100%;
-    margin-bottom: 48px;
+    margin-bottom: 36px;
     text-align: center;
   }
   .info-item {
-    padding: 14px 8px;
+    padding: 10px 6px;
     border: 1px solid #b7c9be;
     border-radius: 8px;
     transition: background .2s;
@@ -105,23 +95,6 @@
     letter-spacing: 0.06em;
   }
 
-  /* ---- 毛泽东简介 ---- */
-  .about-section {
-    text-align: center;
-    margin-bottom: 48px;
-    line-height: 1.9;
-    font-size: 0.88rem;
-    opacity: 0.78;
-    max-width: 560px;
-  }
-  .about-section h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    letter-spacing: 0.08em;
-    opacity: 1;
-  }
-
   /* ---- 底部 ---- */
   footer {
     width: 100%;
@@ -147,25 +120,17 @@
 <div class="container">
 
   <!-- 名字 -->
-  <div class="name">你的名字</div>
+  <div class="name">王世朋</div>
 
-  <!-- 四栏信息 -->
+  <!-- 信息栏 -->
   <div class="info-grid">
     <div class="info-item">
-      <div class="info-label">IP 地址</div>
-      <div class="info-value" id="ip">获取中…</div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">IP 定位</div>
-      <div class="info-value" id="location">获取中…</div>
-    </div>
-    <div class="info-item">
       <div class="info-label">个人博客</div>
-      <div class="info-value"><a href="#blog" target="_blank">前往博客 →</a></div>
+      <div class="info-value"><a href="https://www.shimail.cn" target="_blank">前往博客 →</a></div>
     </div>
     <div class="info-item">
       <div class="info-label">其他项目</div>
-      <div class="info-value"><a href="#projects" target="_blank">查看项目 →</a></div>
+      <div class="info-value"><a href="https://www.wangshipeng.com" target="_blank">查看项目 →</a></div>
     </div>
   </div>
 
@@ -182,19 +147,16 @@
     </div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- 关于毛泽东 -->
-  <div class="about-section">
-    <h3>毛泽东</h3>
-    毛泽东（1893—1976），字润之，湖南湘潭人。中国共产党、中国人民解放军、中华人民共和国的主要缔造者，中国各族人民的伟大领袖。他不仅是杰出的政治家和军事家，也是气势磅礴的诗人，其诗词以豪放雄浑著称，在中国文学史上占有重要地位。
+  <!-- 署名 -->
+  <div style="text-align:right; margin-bottom:48px; font-size:1rem; letter-spacing:0.1em; opacity:0.7; width:100%; max-width:560px;">
+    —— 毛泽东
   </div>
 
 </div>
 
 <footer>
   <div>当前时间：<span id="clock">--</span></div>
-  <div>© 2026 你的名字 · All Rights Reserved</div>
+  <div>© 2026 WSP · All Rights Reserved</div>
 </footer>
 
 <script>
@@ -208,62 +170,6 @@
   }
   tick();
   setInterval(tick, 1000);
-
-  /* 获取访客 IP 与定位（国内接口，中文显示） */
-  function updateIP(ip, location) {
-    document.getElementById('ip').textContent = ip || '未知';
-    document.getElementById('location').textContent = location || '未知';
-  }
-
-  /* 方案一：搜狐接口（script 标签，返回中文城市名） */
-  function trySohu() {
-    return new Promise(function(resolve, reject) {
-      var s = document.createElement('script');
-      s.src = 'https://pv.sohu.com/cityjson';
-      s.onload = function() {
-        if (window.returnCitySN && window.returnCitySN.cip) {
-          resolve({ ip: window.returnCitySN.cip, loc: window.returnCitySN.cname });
-        } else {
-          reject();
-        }
-      };
-      s.onerror = function() { reject(); };
-      document.head.appendChild(s);
-    });
-  }
-
-  /* 方案二：太平洋网络接口（JSONP，返回中文地址） */
-  function tryPConline() {
-    return new Promise(function(resolve, reject) {
-      var cb = '_ip_cb_' + Date.now();
-      window[cb] = function(d) {
-        delete window[cb];
-        document.head.removeChild(s);
-        if (d && d.ip) {
-          var loc = [d.pro, d.city].filter(Boolean).join(' ');
-          resolve({ ip: d.ip, loc: loc || '未知' });
-        } else {
-          reject();
-        }
-      };
-      var s = document.createElement('script');
-      s.src = 'https://whois.pconline.com.cn/ipJson.jsp?callback=' + cb;
-      s.onerror = function() {
-        delete window[cb];
-        reject();
-      };
-      document.head.appendChild(s);
-    });
-  }
-
-  /* 依次尝试，成功即停 */
-  trySohu()
-    .then(function(d) { updateIP(d.ip, d.loc); })
-    .catch(function() {
-      return tryPConline()
-        .then(function(d) { updateIP(d.ip, d.loc); })
-        .catch(function() { updateIP('获取失败', '获取失败'); });
-    });
 </script>
 
 </body>
