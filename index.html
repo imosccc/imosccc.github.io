@@ -209,31 +209,60 @@
   tick();
   setInterval(tick, 1000);
 
-  /* 获取 IP 与定位（国内搜狐接口，中文显示） */
-  function getIPFromSohu() {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://pv.sohu.com/cityjson';
-      script.onload = () => {
-        if (window.returnCitySN) {
-          resolve(window.returnCitySN);
+  /* 获取访客 IP 与定位（国内接口，中文显示） */
+  function updateIP(ip, location) {
+    document.getElementById('ip').textContent = ip || '未知';
+    document.getElementById('location').textContent = location || '未知';
+  }
+
+  /* 方案一：搜狐接口（script 标签，返回中文城市名） */
+  function trySohu() {
+    return new Promise(function(resolve, reject) {
+      var s = document.createElement('script');
+      s.src = 'https://pv.sohu.com/cityjson';
+      s.onload = function() {
+        if (window.returnCitySN && window.returnCitySN.cip) {
+          resolve({ ip: window.returnCitySN.cip, loc: window.returnCitySN.cname });
         } else {
-          reject(new Error('Sohu IP data not available'));
+          reject();
         }
       };
-      script.onerror = () => reject(new Error('Failed to load Sohu IP script'));
-      document.head.appendChild(script);
+      s.onerror = function() { reject(); };
+      document.head.appendChild(s);
     });
   }
 
-  getIPFromSohu()
-    .then(data => {
-      document.getElementById('ip').textContent = data.cip || '未知';
-      document.getElementById('location').textContent = data.cname || '未知';
-    })
-    .catch(() => {
-      document.getElementById('ip').textContent = '获取失败';
-      document.getElementById('location').textContent = '获取失败';
+  /* 方案二：太平洋网络接口（JSONP，返回中文地址） */
+  function tryPConline() {
+    return new Promise(function(resolve, reject) {
+      var cb = '_ip_cb_' + Date.now();
+      window[cb] = function(d) {
+        delete window[cb];
+        document.head.removeChild(s);
+        if (d && d.ip) {
+          var loc = [d.pro, d.city].filter(Boolean).join(' ');
+          resolve({ ip: d.ip, loc: loc || '未知' });
+        } else {
+          reject();
+        }
+      };
+      var s = document.createElement('script');
+      s.src = 'https://whois.pconline.com.cn/ipJson.jsp?callback=' + cb;
+      s.onerror = function() {
+        delete window[cb];
+        reject();
+      };
+      document.head.appendChild(s);
+    });
+  }
+
+  /* 依次尝试，成功即停 */
+  trySohu()
+    .then(function(d) { updateIP(d.ip, d.loc); })
+    .catch(function() {
+      return tryPConline()
+        .then(function(d) { updateIP(d.ip, d.loc); })
+        .catch(function() { updateIP('获取失败', '获取失败'); });
     });
 </script>
 
