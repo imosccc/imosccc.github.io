@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>个人主页</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -68,13 +67,6 @@
     font-weight: 500;
   }
 
-  .music-player {
-    width: 100%;
-    max-width: 680px;
-    margin-bottom: 40px;
-    padding: 0 24px;
-  }
-
   footer {
     width: 100%;
     text-align: center;
@@ -123,10 +115,6 @@
 
 </div>
 
-<div class="music-player">
-  <div id="aplayer">加载中...</div>
-</div>
-
 <footer>
   <div class="github-badge">
     <a href="https://github.com" target="_blank">
@@ -140,7 +128,6 @@
 </footer>
 
 <script>
-  // 关键功能先运行
   function tick() {
     try {
       var now = new Date();
@@ -172,7 +159,7 @@
       
       var runtimeEl = document.getElementById('runtime');
       if (runtimeEl) {
-        runtimeEl.textContent = years + '年 ' + days + '天 ' + hours + '时 ' + mins + '分 ' + secs + '秒';
+        runtimeEl.textContent = years + '年 ' + pad(days) + '天 ' + pad(hours) + '时 ' + pad(mins) + '分 ' + pad(secs) + '秒';
       }
     } catch(e) { console.error('Clock error:', e); }
   }
@@ -212,34 +199,5 @@
   setInterval(updateVoyager, 1000);
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
-<script>
-  // APlayer 初始化 - 带重试机制
-  function initAPlayer(retries) {
-    retries = retries || 0;
-    if (typeof APlayer !== 'undefined') {
-      document.getElementById('aplayer').innerHTML = '';
-      try {
-        new APlayer({
-          container: document.getElementById('aplayer'),
-          autoplay: false,
-          theme: '#2c4a3e',
-          loop: 'all',
-          order: 'random',
-          preload: 'none',
-          volume: 0.7,
-          mutex: true,
-          listFolded: false,
-          listMaxHeight: 200,
-          audio: [
-            {
-              name: '晴天',
-              artist: '周杰伦',
-              url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-              cover: 'https://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
-            },
-            {
-              name: '稻香',
-              artist: '周杰伦',
-              url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-              cover: 'https://p1.music.126.net/6y-
+</body>
+</html>
