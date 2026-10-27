@@ -7,6 +7,53 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* 开场动画 */
+  .splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease-out;
+    cursor: pointer;
+  }
+  .splash-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .splash-skull {
+    font-size: 120px;
+    margin-bottom: 30px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  .splash-welcome {
+    font-size: 48px;
+    font-weight: 700;
+    color: #ff0000;
+    letter-spacing: 15px;
+    margin-bottom: 20px;
+    font-family: "Noto Serif SC", "Source Han Serif CN", "STSong", serif;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+  }
+  .splash-text {
+    font-size: 72px;
+    font-weight: 900;
+    color: #ff0000;
+    letter-spacing: 20px;
+    font-family: Arial, sans-serif;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+
   body {
     background: #ffffff;
     color: #2c4a3e;
@@ -70,34 +117,50 @@
   footer {
     width: 100%;
     text-align: center;
-    padding: 28px 16px 20px;
+    padding: 28px 16px 0;
     border-top: 1px solid #dde7e0;
     font-size: 0.78rem;
-    opacity: 0.6;
     letter-spacing: 0.04em;
     line-height: 2.2;
   }
   #clock { font-variant-numeric: tabular-nums; }
   
-  .github-badge {
+  .badges {
     margin-bottom: 12px;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  .github-badge img {
+  .badges a {
+    display: inline-block;
+  }
+  .badges img {
     height: 20px;
     vertical-align: middle;
   }
 
   @media (max-width: 520px) {
-    .info-grid { grid-template-columns: 1fr; max-width: 280px; }
     .name { font-size: 1.8rem; }
+    .splash-skull { font-size: 80px; }
+    .splash-text { font-size: 48px; letter-spacing: 12px; }
+    .splash-welcome { font-size: 32px; letter-spacing: 10px; }
   }
 </style>
 </head>
 <body>
 
+<!-- 开场动画 -->
+<div class="splash-screen" id="splashScreen">
+  <div class="splash-skull">💀</div>
+  <div class="splash-welcome">欢迎光临</div>
+  <div class="splash-text">OSC</div>
+</div>
+
 <div class="container">
 
-  <div class="name">你的名字</div>
+  <div class="name">OSC</div>
 
   <div class="info-grid">
     <div class="info-item">
@@ -117,18 +180,41 @@
 </div>
 
 <footer>
-  <div class="github-badge">
+  <div class="badges">
     <a href="https://github.com" target="_blank">
       <img src="https://img.shields.io/badge/Source-Github-blue?logo=github" alt="Source-Github">
     </a>
+    <img src="https://img.shields.io/badge/DNS-ENAME-red?logo=nextdns" alt="DNS-ENAME">
+    <img src="https://img.shields.io/badge/DOMIAN-GNAME-brown?logo=webex" alt="DOMIAN-GNAME">
+    <img src="https://img.shields.io/badge/AI-DeepSeek-blue?logo=deepseek" alt="AI-DeepSeek">
   </div>
   <div>本站已运行 <span id="runtime">0年 0天 0时 0分 0秒</span></div>
   <div>旅行者 1 号当前距离地球 <span id="voyager-distance">--</span> 千米，约为 <span id="voyager-au">--</span> 个天文单位（信号单程需 <span id="voyager-signal">--</span>）</div>
   <div>当前时间：<span id="clock">--</span></div>
-  <div>© 2026 你的名字 · All Rights Reserved</div>
+  <div>© 2026 <a href="https://www.wangshipeng.com" target="_blank" style="color: inherit; text-decoration: none;">WSP</a> · All Rights Reserved</div>
 </footer>
 
 <script>
+  // 开场动画控制
+  var splashDismissed = false;
+  
+  function dismissSplash() {
+    if (splashDismissed) return;
+    splashDismissed = true;
+    
+    var splash = document.getElementById('splashScreen');
+    splash.classList.add('fade-out');
+    setTimeout(function() {
+      splash.style.display = 'none';
+    }, 800);
+  }
+  
+  // 点击骷髅头跳过动画
+  document.getElementById('splashScreen').addEventListener('click', dismissSplash);
+  
+  // 2.5秒后自动消失
+  setTimeout(dismissSplash, 2500);
+  
   function tick() {
     try {
       var now = new Date();
@@ -172,33 +258,4 @@
       var speed = 17.0;
       
       var now = new Date();
-      var elapsedSeconds = (now - referenceDate) / 1000;
-      var currentDistance = referenceDistance + (elapsedSeconds * speed);
-      
-      var au = currentDistance / 149597870.7;
-      
-      var lightSpeed = 299792.458;
-      var signalSeconds = currentDistance / lightSpeed;
-      var signalHours = Math.floor(signalSeconds / 3600);
-      var signalMinutes = Math.floor((signalSeconds % 3600) / 60);
-      
-      var distanceFormatted = Math.round(currentDistance).toLocaleString();
-      
-      var distEl = document.getElementById('voyager-distance');
-      var auEl = document.getElementById('voyager-au');
-      var signalEl = document.getElementById('voyager-signal');
-      
-      if (distEl) distEl.textContent = distanceFormatted;
-      if (auEl) auEl.textContent = au.toFixed(6);
-      if (signalEl) signalEl.textContent = signalHours + ' 小时 ' + signalMinutes + ' 分';
-    } catch(e) { console.error('Voyager error:', e); }
-  }
-  
-  tick();
-  updateVoyager();
-  setInterval(tick, 1000);
-  setInterval(updateVoyager, 1000);
-</script>
-
-</body>
-</html>
+      var elapsedSeconds = (now - referenc
