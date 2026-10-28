@@ -32,15 +32,6 @@
     margin-bottom: 30px;
     animation: pulse 1.5s ease-in-out infinite;
   }
-  .splash-welcome {
-    font-size: 48px;
-    font-weight: 700;
-    color: #ff0000;
-    letter-spacing: 15px;
-    margin-bottom: 20px;
-    font-family: "Noto Serif SC", "Source Han Serif CN", "STSong", serif;
-    text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-  }
   .splash-text {
     font-size: 72px;
     font-weight: 900;
@@ -48,6 +39,15 @@
     letter-spacing: 20px;
     font-family: Arial, sans-serif;
     text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+  .splash-welcome {
+    font-size: 48px;
+    font-weight: 700;
+    color: #ff0000;
+    letter-spacing: 15px;
+    margin-top: 20px;
+    font-family: "Noto Serif SC", "Source Han Serif CN", "STSong", serif;
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
   }
   @keyframes pulse {
     0%, 100% { transform: scale(1); opacity: 1; }
@@ -154,13 +154,13 @@
 <!-- 开场动画 -->
 <div class="splash-screen" id="splashScreen">
   <div class="splash-skull">💀</div>
-  <div class="splash-welcome">欢迎光临</div>
   <div class="splash-text">OSC</div>
+  <div class="splash-welcome">欢迎光临</div>
 </div>
 
 <div class="container">
 
-  <div class="name">OSC</div>
+  <div class="name">王世朋</div>
 
   <div class="info-grid">
     <div class="info-item">
@@ -258,4 +258,4 @@
       var speed = 17.0;
       
       var now = new Date();
-      var elapsedSeconds = (now - referenc
+      var elapsedSeconds = (now - referenceDa
