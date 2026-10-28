@@ -3,56 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>个人主页</title>
+<title>OSC</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  /* 开场动画 */
-  .splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    transition: opacity 0.8s ease-out;
-    cursor: pointer;
-  }
-  .splash-screen.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
-  .splash-skull {
-    font-size: 120px;
-    margin-bottom: 30px;
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-  .splash-text {
-    font-size: 72px;
-    font-weight: 900;
-    color: #ff0000;
-    letter-spacing: 20px;
-    font-family: Arial, sans-serif;
-    text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-  }
-  .splash-welcome {
-    font-size: 48px;
-    font-weight: 700;
-    color: #ff0000;
-    letter-spacing: 15px;
-    margin-top: 20px;
-    font-family: "Noto Serif SC", "Source Han Serif CN", "STSong", serif;
-    text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-  }
 
   body {
     background: #ffffff;
@@ -74,78 +27,112 @@
     flex: 1;
   }
 
+  /* ---- 开场动画 ---- */
+  .splash-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease;
+    opacity: 1;
+  }
+  .splash-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .splash-skull {
+    font-size: 5rem;
+    margin-bottom: 20px;
+  }
+  .splash-welcome {
+    font-size: 2rem;
+    color: #ff0000;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+  }
+  .splash-text {
+    font-size: 2.4rem;
+    color: #ff0000;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+  }
+
+  /* ---- 名字区域 ---- */
   .name {
     font-size: 2.4rem;
     font-weight: 700;
     letter-spacing: 0.15em;
     margin-bottom: 36px;
+    position: relative;
+  }
+  .name::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 2px;
+    background: #2c4a3e;
+    margin: 14px auto 0;
+    border-radius: 1px;
   }
 
-  .info-grid {
+  /* ---- 链接卡片 ---- */
+  .link-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 16px;
     width: 100%;
-    max-width: 400px;
     margin-bottom: 48px;
-    text-align: center;
   }
-  .info-item {
-    padding: 14px 8px;
+  .link-card {
+    padding: 24px 16px;
     border: 1px solid #b7c9be;
     border-radius: 8px;
+    text-align: center;
     transition: background .2s;
-    cursor: default;
-  }
-  .info-item:hover { background: #f2f7f4; }
-  .info-item a {
-    color: #2c4a3e;
+    cursor: pointer;
     text-decoration: none;
+    color: #2c4a3e;
+    display: block;
   }
-  .info-item a:hover { text-decoration: underline; }
-  .info-label {
-    font-size: 0.72rem;
-    opacity: 0.55;
-    margin-bottom: 6px;
-    letter-spacing: 0.08em;
+  .link-card:hover { background: #f2f7f4; }
+  .link-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
   }
-  .info-value {
-    font-size: 0.88rem;
-    font-weight: 500;
+  .link-card-url {
+    font-size: 0.82rem;
+    opacity: 0.6;
+    word-break: break-all;
   }
 
+  /* ---- 底部 ---- */
   footer {
     width: 100%;
     text-align: center;
-    padding: 28px 16px 0;
+    padding: 28px 16px 32px;
     border-top: 1px solid #dde7e0;
     font-size: 0.78rem;
     letter-spacing: 0.04em;
-    line-height: 2.2;
+    line-height: 1.8;
   }
+  footer a {
+    color: #2c4a3e;
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
   #clock { font-variant-numeric: tabular-nums; }
-  
-  .badges {
-    margin-bottom: 12px;
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .badges a {
-    display: inline-block;
-  }
-  .badges img {
-    height: 20px;
-    vertical-align: middle;
-  }
+  .badges { margin-bottom: 10px; }
+  .badges img { margin: 0 3px; vertical-align: middle; }
 
+  /* ---- 响应式 ---- */
   @media (max-width: 520px) {
     .name { font-size: 1.8rem; }
-    .splash-skull { font-size: 80px; }
-    .splash-text { font-size: 48px; letter-spacing: 12px; }
-    .splash-welcome { font-size: 32px; letter-spacing: 10px; }
   }
 </style>
 </head>
@@ -154,108 +141,97 @@
 <!-- 开场动画 -->
 <div class="splash-screen" id="splashScreen">
   <div class="splash-skull">💀</div>
-  <div class="splash-text">OSC</div>
   <div class="splash-welcome">欢迎光临</div>
+  <div class="splash-text">OSC</div>
 </div>
 
 <div class="container">
 
-  <div class="name">王世朋</div>
+  <!-- 名字 -->
+  <div class="name">OSC</div>
 
-  <div class="info-grid">
-    <div class="info-item">
-      <div class="info-label">个人博客</div>
-      <div class="info-value">
-        <a href="https://www.shimail.cn" target="_blank">前往博客 →</a>
-      </div>
-    </div>
-    <div class="info-item">
-      <div class="info-label">其他项目</div>
-      <div class="info-value">
-        <a href="https://www.wangshipeng.com" target="_blank">查看项目 →</a>
-      </div>
-    </div>
+  <!-- 链接卡片 -->
+  <div class="link-grid">
+    <a class="link-card" href="https://shimail.cn" target="_blank">
+      <div class="link-card-title">个人博客</div>
+      <div class="link-card-url">shimail.cn</div>
+    </a>
+    <a class="link-card" href="https://wangshipeng.com" target="_blank">
+      <div class="link-card-title">其他项目</div>
+      <div class="link-card-url">wangshipeng.com</div>
+    </a>
   </div>
 
 </div>
 
 <footer>
   <div class="badges">
-    <a href="https://github.com" target="_blank">
-      <img src="https://img.shields.io/badge/Source-Github-blue?logo=github" alt="Source-Github">
-    </a>
+    <a href="https://github.com" target="_blank"><img src="https://img.shields.io/badge/GitHub-OSC-black?logo=github" alt="GitHub"></a>
     <img src="https://img.shields.io/badge/DNS-ENAME-red?logo=nextdns" alt="DNS-ENAME">
     <img src="https://img.shields.io/badge/DOMIAN-GNAME-brown?logo=webex" alt="DOMIAN-GNAME">
     <img src="https://img.shields.io/badge/AI-DeepSeek-blue?logo=deepseek" alt="AI-DeepSeek">
   </div>
-  <div>本站已运行 <span id="runtime">0年 0天 0时 0分 0秒</span></div>
-  <div>旅行者 1 号当前距离地球 <span id="voyager-distance">--</span> 千米，约为 <span id="voyager-au">--</span> 个天文单位（信号单程需 <span id="voyager-signal">--</span>）</div>
+  <div>本站已运行：<span id="runtime">--</span></div>
+  <div>旅行者1号距地球：<span id="voyager">--</span> 亿公里</div>
   <div>当前时间：<span id="clock">--</span></div>
-  <div>© 2026 <a href="https://www.wangshipeng.com" target="_blank" style="color: inherit; text-decoration: none;">WSP</a> · All Rights Reserved</div>
+  <div>© 2026 <a href="https://www.wangshipeng.com" target="_blank">WSP</a> · All Rights Reserved</div>
 </footer>
 
 <script>
-  // 开场动画控制
+  /* 开场动画 - 1.5秒后自动消失，不可跳过 */
   var splashDismissed = false;
-  
   function dismissSplash() {
     if (splashDismissed) return;
     splashDismissed = true;
-    
     var splash = document.getElementById('splashScreen');
     splash.classList.add('fade-out');
     setTimeout(function() {
       splash.style.display = 'none';
     }, 800);
   }
-  
-  // 点击骷髅头跳过动画
-  document.getElementById('splashScreen').addEventListener('click', dismissSplash);
-  
-  // 2.5秒后自动消失
-  setTimeout(dismissSplash, 2500);
-  
+  setTimeout(dismissSplash, 1500);
+
+  /* 实时时钟 */
   function tick() {
-    try {
-      var now = new Date();
-      var pad = function(n) { return String(n).padStart(2, '0'); };
-      var clockEl = document.getElementById('clock');
-      if (clockEl) {
-        clockEl.textContent =
-          now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) + ' ' +
-          pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-      }
-      
-      var start = new Date(2022, 9, 1, 10, 10, 0);
-      var years = now.getFullYear() - start.getFullYear();
-      var months = now.getMonth() - start.getMonth();
-      var days = now.getDate() - start.getDate();
-      var hours = now.getHours() - start.getHours();
-      var mins = now.getMinutes() - start.getMinutes();
-      var secs = now.getSeconds() - start.getSeconds();
-      
-      if (secs < 0) { secs += 60; mins--; }
-      if (mins < 0) { mins += 60; hours--; }
-      if (hours < 0) { hours += 24; days--; }
-      if (days < 0) {
-        var prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-        days += prevMonth.getDate();
-        months--;
-      }
-      if (months < 0) { months += 12; years--; }
-      
-      var runtimeEl = document.getElementById('runtime');
-      if (runtimeEl) {
-        runtimeEl.textContent = years + '年 ' + pad(days) + '天 ' + pad(hours) + '时 ' + pad(mins) + '分 ' + pad(secs) + '秒';
-      }
-    } catch(e) { console.error('Clock error:', e); }
+    var now = new Date();
+    var pad = function(n) { return String(n).padStart(2, '0'); };
+    document.getElementById('clock').textContent =
+      now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate()) + ' ' +
+      pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
   }
-  
+  tick();
+  setInterval(tick, 1000);
+
+  /* 运行时间 - 从 2022-10-01 10:10:00 起 */
+  function updateRuntime() {
+    var start = new Date('2022-10-01T10:10:00');
+    var now = new Date();
+    var diff = Math.floor((now - start) / 1000);
+    var secs = diff % 60;
+    var mins = Math.floor(diff / 60) % 60;
+    var hours = Math.floor(diff / 3600) % 24;
+    var days = Math.floor(diff / 86400);
+    var pad = function(n) { return String(n).padStart(2, '0'); };
+    document.getElementById('runtime').textContent =
+      days + ' 天 ' + pad(hours) + ':' + pad(mins) + ':' + pad(secs);
+  }
+  updateRuntime();
+  setInterval(updateRuntime, 1000);
+
+  /* 旅行者1号距离 - 参考: 2026-02-23 约257亿公里, 速度约17km/s */
   function updateVoyager() {
-    try {
-      var referenceDate = new Date(2026, 1, 23, 0, 0, 0);
-      var referenceDistance = 25700000000;
-      var speed = 17.0;
-      
-      var now = new Date();
-      var elapsedSeconds = (now - referenceDa
+    var refDate = new Date('2026-02-23T00:00:00');
+    var now = new Date();
+    var diffSec = (now - refDate) / 1000;
+    var refDist = 25700000000;
+    var speed = 17;
+    var dist = refDist + speed * diffSec;
+    var distYi = (dist / 100000000).toFixed(2);
+    document.getElementById('voyager').textContent = distYi;
+  }
+  updateVoyager();
+  setInterval(updateVoyager, 1000);
+</script>
+
+</body>
+</html>
