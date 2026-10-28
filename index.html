@@ -80,7 +80,7 @@
     border-radius: 1px;
   }
 
-  /* ---- 链接卡片 ---- */
+  /* ---- 链接卡片（始终横排两列） ---- */
   .link-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -173,6 +173,8 @@
   </div>
   <div>本站已运行：<span id="runtime">--</span></div>
   <div>旅行者1号距地球：<span id="voyager">--</span> 亿公里</div>
+  <div>已飞行：<span id="voyager-time">--</span></div>
+  <div>信号传输时间：<span id="voyager-signal">--</span></div>
   <div>当前时间：<span id="clock">--</span></div>
   <div>© 2026 <a href="https://www.wangshipeng.com" target="_blank">WSP</a> · All Rights Reserved</div>
 </footer>
@@ -218,7 +220,7 @@
   updateRuntime();
   setInterval(updateRuntime, 1000);
 
-  /* 旅行者1号距离 - 参考: 2026-02-23 约257亿公里, 速度约17km/s */
+  /* 旅行者1号信息 - 参考: 2026-02-23 约257亿公里, 速度约17km/s */
   function updateVoyager() {
     var refDate = new Date('2026-02-23T00:00:00');
     var now = new Date();
@@ -228,10 +230,22 @@
     var dist = refDist + speed * diffSec;
     var distYi = (dist / 100000000).toFixed(2);
     document.getElementById('voyager').textContent = distYi;
-  }
-  updateVoyager();
-  setInterval(updateVoyager, 1000);
-</script>
-
-</body>
-</html>
+    
+    // 已飞行时间（从1977年9月5日发射）
+    var launchDate = new Date('1977-09-05T12:56:00');
+    var flightSec = Math.floor((now - launchDate) / 1000);
+    var flightDays = Math.floor(flightSec / 86400);
+    var flightYears = Math.floor(flightDays / 365.25);
+    var remainDays = Math.floor(flightDays - flightYears * 365.25);
+    var flightHours = Math.floor((flightSec % 86400) / 3600);
+    var flightMins = Math.floor((flightSec % 3600) / 60);
+    var flightSecs = flightSec % 60;
+    var pad = function(n) { return String(n).padStart(2, '0'); };
+    document.getElementById('voyager-time').textContent = 
+      flightYears + ' 年 ' + remainDays + ' 天 ' + pad(flightHours) + ':' + pad(flightMins) + ':' + pad(flightSecs);
+    
+    // 信号传输时间（光速）
+    var lightSpeed = 299792.458; // km/s
+    var signalSec = dist / lightSpeed;
+    var signalHours = Math.floor(signalSec / 3600);
+ 
